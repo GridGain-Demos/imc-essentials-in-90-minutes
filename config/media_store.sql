@@ -30,20 +30,21 @@ DROP TABLE IF EXISTS Playlist;
 DROP TABLE IF EXISTS PlaylistTrack;
 DROP TABLE IF EXISTS Track;
 
+CREATE TABLE Artist
+(
+    ArtistId INT,
+    Name VARCHAR(120),
+    PRIMARY KEY (ArtistId)
+) WITH "template=partitioned, backups=1, CACHE_NAME=Artist, VALUE_TYPE=oreilly.training.model.Artist";
+
 CREATE TABLE Album
 (
     AlbumId INT,
     Title VARCHAR(160),
     ArtistId INT,
-    PRIMARY KEY  (AlbumId)
-);
-
-CREATE TABLE Artist
-(
-    ArtistId INT,
-    Name VARCHAR(120),
-    PRIMARY KEY  (ArtistId)
-);
+    PRIMARY KEY (AlbumId, ArtistId)
+) WITH "template=partitioned, backups=1, affinityKey=ArtistId, CACHE_NAME=Album,
+        KEY_TYPE=oreilly.training.model.AlbumKey, VALUE_TYPE=oreilly.training.model.Album";
 
 CREATE TABLE Customer
 (
@@ -60,8 +61,33 @@ CREATE TABLE Customer
     Fax VARCHAR(24),
     Email VARCHAR(60),
     SupportRepId INT,
-    PRIMARY KEY  (CustomerId)
-);
+    PRIMARY KEY (CustomerId)
+) WITH "template=partitioned, backups=1, CACHE_NAME=Customer, VALUE_TYPE=oreilly.training.model.Customer";
+
+CREATE TABLE Invoice
+(
+    InvoiceId INT,
+    CustomerId INT,
+    InvoiceDate DATE,
+    BillingAddress VARCHAR(70),
+    BillingCity VARCHAR(40),
+    BillingState VARCHAR(40),
+    BillingCountry VARCHAR(40),
+    BillingPostalCode VARCHAR(10),
+    Total DECIMAL(10,2),
+    PRIMARY KEY  (InvoiceId, CustomerId)
+) WITH "template=partitioned, backups=1, affinityKey=CustomerId, CACHE_NAME=Invoice,
+        KEY_TYPE=oreilly.training.model.InvoiceKey, VALUE_TYPE=oreilly.training.model.Invoice";
+
+CREATE TABLE InvoiceLine
+(
+    InvoiceLineId INT,
+    InvoiceId INT,
+    TrackId INT,
+    UnitPrice DECIMAL(10,2),
+    Quantity INT,
+    PRIMARY KEY (InvoiceLineId)
+) WITH "template=partitioned, backups=1, CACHE_NAME=InvoiceLine, VALUE_TYPE=oreilly.training.model.InvoiceLine";
 
 CREATE TABLE Employee
 (
@@ -80,53 +106,29 @@ CREATE TABLE Employee
     Phone VARCHAR(24),
     Fax VARCHAR(24),
     Email VARCHAR(60),
-    PRIMARY KEY  (EmployeeId)
-);
+    PRIMARY KEY (EmployeeId)
+) WITH "template=partitioned, backups=1, CACHE_NAME=Employee, VALUE_TYPE=oreilly.training.model.Employee";
 
 CREATE TABLE Genre
 (
     GenreId INT,
     Name VARCHAR(120),
-    PRIMARY KEY  (GenreId)
-);
-
-CREATE TABLE Invoice
-(
-    InvoiceId INT,
-    CustomerId INT,
-    InvoiceDate DATE,
-    BillingAddress VARCHAR(70),
-    BillingCity VARCHAR(40),
-    BillingState VARCHAR(40),
-    BillingCountry VARCHAR(40),
-    BillingPostalCode VARCHAR(10),
-    Total DECIMAL(10,2),
-    PRIMARY KEY  (InvoiceId)
-);
-
-CREATE TABLE InvoiceLine
-(
-    InvoiceLineId INT,
-    InvoiceId INT,
-    TrackId INT,
-    UnitPrice DECIMAL(10,2),
-    Quantity INT,
-    PRIMARY KEY  (InvoiceLineId)
-);
+    PRIMARY KEY (GenreId)
+) WITH "template=replicated, CACHE_NAME=Genre, VALUE_TYPE=oreilly.training.model.Genre";
 
 CREATE TABLE MediaType
 (
     MediaTypeId INT,
     Name VARCHAR(120),
-    PRIMARY KEY  (MediaTypeId)
-);
+    PRIMARY KEY (MediaTypeId)
+) WITH "template=replicated, CACHE_NAME=MediaType, VALUE_TYPE=oreilly.training.model.MediaType";
 
 CREATE TABLE Playlist
 (
     PlaylistId INT,
     Name VARCHAR(120),
     PRIMARY KEY  (PlaylistId)
-);
+) WITH "template=partitioned, backups=1, CACHE_NAME=Playlist, VALUE_TYPE=oreilly.training.model.Playlist";
 
 CREATE TABLE PlaylistTrack
 (
@@ -134,7 +136,7 @@ CREATE TABLE PlaylistTrack
     TrackId INT,
     Dummy TINYINT, /* to fix the issue saying that the table must have at least one non-primary key column */
     PRIMARY KEY (PlaylistId, TrackId)
-);
+) WITH "template=partitioned, backups=1, CACHE_NAME=PlaylistTrack, VALUE_TYPE=oreilly.training.model.PlaylistTrack";
 
 CREATE TABLE Track
 (
@@ -148,62 +150,7 @@ CREATE TABLE Track
     Bytes INT,
     UnitPrice DECIMAL(10,2),
     PRIMARY KEY  (TrackId)
-);
-
-/*
-ALTER TABLE Album ADD CONSTRAINT FK_AlbumArtistId
-    FOREIGN KEY (ArtistId) REFERENCES Artist (ArtistId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_AlbumArtistId ON Album (ArtistId);
-
-ALTER TABLE Customer ADD CONSTRAINT FK_CustomerSupportRepId
-    FOREIGN KEY (SupportRepId) REFERENCES Employee (EmployeeId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_CustomerSupportRepId ON Customer (SupportRepId);
-
-ALTER TABLE Employee ADD CONSTRAINT FK_EmployeeReportsTo
-    FOREIGN KEY (ReportsTo) REFERENCES Employee (EmployeeId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_EmployeeReportsTo ON Employee (ReportsTo);
-
-ALTER TABLE Invoice ADD CONSTRAINT FK_InvoiceCustomerId
-    FOREIGN KEY (CustomerId) REFERENCES Customer (CustomerId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_InvoiceCustomerId ON Invoice (CustomerId);
-
-ALTER TABLE InvoiceLine ADD CONSTRAINT FK_InvoiceLineInvoiceId
-    FOREIGN KEY (InvoiceId) REFERENCES Invoice (InvoiceId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_InvoiceLineInvoiceId ON InvoiceLine (InvoiceId);
-
-ALTER TABLE InvoiceLine ADD CONSTRAINT FK_InvoiceLineTrackId
-    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_InvoiceLineTrackId ON InvoiceLine (TrackId);
-
-ALTER TABLE PlaylistTrack ADD CONSTRAINT FK_PlaylistTrackPlaylistId
-    FOREIGN KEY (PlaylistId) REFERENCES Playlist (PlaylistId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-ALTER TABLE PlaylistTrack ADD CONSTRAINT FK_PlaylistTrackTrackId
-    FOREIGN KEY (TrackId) REFERENCES Track (TrackId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_PlaylistTrackTrackId ON PlaylistTrack (TrackId);
-
-ALTER TABLE Track ADD CONSTRAINT FK_TrackAlbumId
-    FOREIGN KEY (AlbumId) REFERENCES Album (AlbumId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_TrackAlbumId ON Track (AlbumId);
-
-ALTER TABLE Track ADD CONSTRAINT FK_TrackGenreId
-    FOREIGN KEY (GenreId) REFERENCES Genre (GenreId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_TrackGenreId ON Track (GenreId);
-
-ALTER TABLE Track ADD CONSTRAINT FK_TrackMediaTypeId
-    FOREIGN KEY (MediaTypeId) REFERENCES MediaType (MediaTypeId) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-CREATE INDEX IFK_TrackMediaTypeId ON Track (MediaTypeId);
-*/
+) WITH "template=partitioned, backups=1, CACHE_NAME=Track, VALUE_TYPE=oreilly.training.model.Track";
 
 INSERT INTO Genre (GenreId, Name) VALUES (1, 'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2, 'Jazz');
