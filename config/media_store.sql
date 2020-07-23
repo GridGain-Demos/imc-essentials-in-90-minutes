@@ -158,6 +158,8 @@ CREATE TABLE Track
 ) WITH "template=partitioned, backups=1, affinityKey=ArtistId, CACHE_NAME=Track,
         KEY_TYPE=oreilly.training.model.TrackKey, VALUE_TYPE=oreilly.training.model.Track";
 
+SET STREAMING ON;
+
 INSERT INTO Genre (GenreId, Name) VALUES (1, 'Rock');
 INSERT INTO Genre (GenreId, Name) VALUES (2, 'Jazz');
 INSERT INTO Genre (GenreId, Name) VALUES (3, 'Metal');
@@ -15777,4 +15779,4 @@ INSERT INTO PlaylistTrack (PlaylistId, TrackId, ArtistId) VALUES (17, 2096, 114)
 INSERT INTO PlaylistTrack (PlaylistId, TrackId, ArtistId) VALUES (17, 3290, 179);
 INSERT INTO PlaylistTrack (PlaylistId, TrackId, ArtistId) VALUES (18, 597, 68);
 
-
+SET STREAMING OFF;
