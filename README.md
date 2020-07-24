@@ -22,33 +22,38 @@ local machine by running the following command in a terminal window:
 
 `docker-compose -f docker/control-center.yaml up -d`
 
-Connect to any of the docker containers with a command line shell:
+Open your browser and navigate to [http://localhost:8443](http://localhost:8443) to confirm that the tool is up and running.
+[Sign up](https://www.gridgain.com/docs/control-center/latest/creating-account) with the tool by creating an account.
+(Note, the account is stored in your local Control Center container and not shared with anybody else).
 
-`docker exec -it ignite-server-node-1 bash`
+Lastly, you need to interconnect the Ignite cluster with Control Center to get metrics and execute various commands:
+
+* Connect to any of the docker containers running an Ignite cluster node: `docker exec -it ignite-server-node-1 bash`
+* Go to the Ignite `bin` folder: `cd apache-ignite/bin/`
+* Instruct the cluster to work with your local instance of Control Center: `./management.sh --uri http://control-center-frontend:8443`
+
+Go back to Control Center opened in your browser and [register the cluster](https://www.gridgain.com/docs/control-center/latest/clusters#adding-clusters).
+Look for the line as follows in the logs of the cluster nodes that prints out an ID of your cluster:
+
+```
+[23:18:10] If you are already using Control Center, you can add the cluster manually by its ID:
+[23:18:10]  52b2fb3b-dbb7-45af-add3-ef37eeaf4759
+```
 
 ## Create Media Store Schema and Load Data
 
-Connect to any of the docker containers with a command line shell:
+Now you need to create a Media Store schema and load the cluster with sample data (go to step 3 if you are already in the 
+`bin` folder of an Ignite container):
 
-`docker exec -it ignite-server-node-1 bash`
-
-Go to the folder with default Ignite shell scripts:
-
-`cd apache-ignite/bin/`
-
-Connect to the cluster (via the node of the container you are connected to) with SQLLine tool:
-
-`./sqlline.sh --verbose=true -u jdbc:ignite:thin://127.0.0.1/`
-
-Create the Media Store schema and load the cluster with sample data by running the following command from the SQLLine
-connection:
-
-`!run /opt/ignite/ext-config/media_store.sql`
+1. Connect to any of the docker containers with a command line shell: `docker exec -it ignite-server-node-1 bash`
+2. Go to the folder with default Ignite shell scripts: `cd apache-ignite/bin/`
+3. Connect to the cluster with SQLLine tool: `./sqlline.sh --verbose=true -u jdbc:ignite:thin://127.0.0.1/`
+4. Create the schema and load data: `!run /opt/ignite/ext-config/media_store.sql`
 
 Close connection to the container following these steps:
 
 * Close the SQLLine connection: `!q`
-* Quit the container use `Ctr+C` sequence.
+* Type `exit` to exit from `bash`.
 
 
 ## Stopping Cluster
