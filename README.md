@@ -1,6 +1,16 @@
-# imc-essentials-in-90-minutes
-O'Reilly Course, In-Memory Computing Essentials in 90 minutes
+# Code Samples for O'Reilly Training, In-Memory Computing Essentials in 90 minutes
 
+This project is for the live [O'Reilly Training - In-Memory Computing Essentials in 90 minutes](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920455431/).
+The code samples demonstrate the essential capabilities of in-memory computing platforms such as Apache Ignite in practice.
+
+You can study the samples by following the instructor during the training or completing this guide on your own.
+
+## What You Need
+* Docker 19 or later
+* Docker Compose 1.25.5 or later
+* Java Developer Kit, version 8 or later
+* Apache Maven 3.0 or later
+* Your favorite IDE, such as IntelliJ, IDEA, or Eclipse
 
 ## Starting Ignite Cluster
 
@@ -135,7 +145,18 @@ sections.
 7. Run that query once again and you'll see that all the `artist` columns are filled in because now all the tracks are
 stored together with their artists on the same cluster node.
 
-## Stopping Cluster
+## Running Co-located Compute Tasks
 
-Shut down the cluster and remove associated containers: `docker-compose -f docker/ignite-cluster.yaml rm -s -v`
+Run `ComputationSampleApp` that uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers.
+The compute task executes on every cluster node, iterates through local records and responds to the application that merges partial
+results.
+
+Make sure to complete the TODO left in the code. Otherwise, that task will produce an incorrect result.
+ 
+## Clear Resources
+
+Clear all the Docker resources associated with this project:
+ 
+ * Stop the Ignite cluster and purge its resources:  `docker-compose -f docker/ignite-cluster.yaml rm -s -v`
+ * Stop GridGain Control Center: 
 
