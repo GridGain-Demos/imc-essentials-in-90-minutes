@@ -3,13 +3,12 @@ services:
   ignite-server-node-1:
     image: apacheignite/ignite:2.8.1
     container_name: ignite-server-node-1
-    tty: true
     environment:
-      - CONFIG_URI=/opt/ignite/ext-config/ignite-config.xml
+      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node1.xml
       - OPTION_LIBS=ignite-rest-http
     ports:
-      - "10800:10800"
-      - "6080:8080"
+      - "47500:47500"
+      - "47100:47100"
     networks:
       - ignite-net
     volumes:
@@ -17,22 +16,23 @@ services:
       - ../libs/control-center-agent/bin/management.sh:/opt/ignite/apache-ignite/bin/management.sh
       - ../libs/control-center-agent/libs/control-center-agent:/opt/ignite/apache-ignite/libs/control-center-agent
 
-  ignite-server-node-2:
-    image: apacheignite/ignite:2.8.1
-    container_name: ignite-server-node-2
-    tty: true
-    environment:
-      - CONFIG_URI=/opt/ignite/ext-config/ignite-config.xml
-      - OPTION_LIBS=ignite-rest-http
-    ports:
-      - "10801:10800"
-      - "6081:8080"
-    networks:
-      - ignite-net
-    volumes:
-      - ../config:/opt/ignite/ext-config
-      - ../libs/control-center-agent/bin/management.sh:/opt/ignite/apache-ignite/bin/management.sh
-      - ../libs/control-center-agent/libs/control-center-agent:/opt/ignite/apache-ignite/libs/control-center-agent
+# ------ Ucomment the settings below to create a two-node cluster -----
+#
+#  ignite-server-node-2:
+#    image: apacheignite/ignite:2.8.1
+#    container_name: ignite-server-node-2
+#    environment:
+#      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node2.xml
+#      - OPTION_LIBS=ignite-rest-http
+#    ports:
+#      - "47501:47501"
+#      - "47101:47101"
+#    networks:
+#      - ignite-net
+#    volumes:
+#      - ../config:/opt/ignite/ext-config
+#      - ../libs/control-center-agent/bin/management.sh:/opt/ignite/apache-ignite/bin/management.sh
+#      - ../libs/control-center-agent/libs/control-center-agent:/opt/ignite/apache-ignite/libs/control-center-agent
 
 networks:
   ignite-net:

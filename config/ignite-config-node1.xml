@@ -54,8 +54,12 @@
         <!-- Configuring the IP finder for nodes auto-discovery. -->
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <!--
+                    Setting the port explicitly to be able to connect to this dockerized node from Ignite thick clients
+                    running on the host system. Not needed if your clients are running in the same Docker network.
+                -->
+                <property name="localPort" value="47500"/>
                 <property name="ipFinder">
-
                     <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder">
                         <property name="addresses">
                             <list>
@@ -65,6 +69,16 @@
                         </property>
                     </bean>
                 </property>
+            </bean>
+        </property>
+
+        <property name="communicationSpi">
+            <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <!--
+                    Setting the port explicitly to be able to connect to this dockerized node from Ignite thick clients
+                    running on the host system. Not needed if your clients are running in the same Docker network.
+                -->
+                <property name="localPort" value="47100"/>
             </bean>
         </property>
     </bean>
