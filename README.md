@@ -5,7 +5,8 @@ The code samples demonstrate the essential capabilities of in-memory computing p
 
 You can study the samples by following the instructor during the training or completing this guide on your own.
 
-## What You Need
+## Setting Up Environment
+
 * Docker 19 or later
 * Docker Compose 1.25.5 or later
 * Java Developer Kit, version 8 or later

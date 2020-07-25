@@ -103,20 +103,19 @@ public class ComputationSampleApp {
                 BigDecimal unitPrice = new BigDecimal(0);
                 int quantity = 0;
 
-                processPurchase(customerPurchases, key.field("customerId"),
-                    unitPrice.multiply(new BigDecimal(quantity)));
+                processPurchase(key.field("customerId"), unitPrice.multiply(new BigDecimal(quantity)));
             });
 
             return calculateTopCustomers();
         }
 
-        private void processPurchase(HashMap<Integer, BigDecimal> purchases, int itemId, BigDecimal price) {
-            BigDecimal totalPrice = purchases.get(itemId);
+        private void processPurchase(int itemId, BigDecimal price) {
+            BigDecimal totalPrice = customerPurchases.get(itemId);
 
             if (totalPrice == null)
-                purchases.put(itemId, price);
+                customerPurchases.put(itemId, price);
             else
-                purchases.put(itemId, totalPrice.add(price));
+                customerPurchases.put(itemId, totalPrice.add(price));
         }
 
         private TreeSet<TopCustomer> calculateTopCustomers() {
