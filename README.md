@@ -11,7 +11,7 @@ You can study the samples by following the instructor during the training or com
 * Docker Compose 1.25.5 or later
 * Java Developer Kit, version 8 or later
 * Apache Maven 3.0 or later
-* Your favorite IDE, such as IntelliJ, IDEA, or Eclipse
+* Your favorite IDE, such as IntelliJ IDEA, or Eclipse
 
 ## Starting Ignite Cluster
 
