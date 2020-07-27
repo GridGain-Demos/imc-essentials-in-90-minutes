@@ -7,7 +7,7 @@ You can study the samples by following the instructor during the training or com
 
 ## Setting Up Environment
 
-* Docker 19 or later
+* Docker 19 or later (install Docker Desktop Community 2.3.0.3 or later for simplicity)
 * Docker Compose 1.25.5 or later
 * Java Developer Kit, version 8 or later
 * Apache Maven 3.0 or later
