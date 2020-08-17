@@ -45,18 +45,10 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
  *
  * Finish the implementation of the compute task by completing the TODO task.
  */
-public class ComputationSampleApp {
+public class ComputeApp {
 
     public static void main(String[] args) {
-        IgniteConfiguration cfg = new IgniteConfiguration();
-
-        cfg.setClientMode(true);
-        cfg.setPeerClassLoadingEnabled(true);
-
-        cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(
-            new TcpDiscoveryVmIpFinder().setAddresses(Collections.singletonList("127.0.0.1:47500..47509"))));
-
-        Ignite ignite = Ignition.start(cfg);
+        Ignite ignite = Ignition.start("ignite-config.xml");
 
         calculateTopPayingCustomers(ignite);
 
