@@ -30,6 +30,8 @@ import org.apache.ignite.Ignition;
 public class KeyValueApp {
 
     public static void main(String[] args) {
+        Ignition.setClientMode(true);
+
         Ignite ignite = Ignition.start("ignite-config.xml");
 
         getArtistsDistribution(ignite);

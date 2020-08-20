@@ -48,6 +48,8 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
 public class ComputeApp {
 
     public static void main(String[] args) {
+        Ignition.setClientMode(true);
+
         Ignite ignite = Ignition.start("ignite-config.xml");
 
         calculateTopPayingCustomers(ignite);
@@ -91,6 +93,11 @@ public class ComputeApp {
                  * TODO:
                  * initialize the <code>unitPrice</code> and <code>quantity</code>
                  * variables with the data from <code>val</code> variable.
+                 *
+                 * Rename this compute task so that the server nodes can load the logic without the cluster restart.
+                 * That's just the specificity of this demo - the oreilly.training.ServerStartup added the class of this
+                 * logic to its classpath upon the startup and, thus, won't load new versions of the class from the client
+                 * apps like this one.
                  */
                 BigDecimal unitPrice = new BigDecimal(0);
                 int quantity = 0;

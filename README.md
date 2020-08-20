@@ -16,18 +16,20 @@ You can study the samples by following the instructor during the training or com
 Start a two-node Ignite cluster:
 
 1. Open a terminal window and navigate to the root directory of this project.
+
 2. Use Maven to create an executable JAR with all the dependencies:
-```bash
-mvn clean package
-```
+    ```bash
+    mvn clean package
+    ```
 3. Start the first cluster node:
-```bash
-java -cp target/training.jar oreilly.training.ServerStartup
-```
-4. Open another terminal window and start the second node with a similar command:
-```bash
-java -cp target/training.jar oreilly.training.ServerStartup
-```
+    ```bash
+    java -cp target/training.jar oreilly.training.ServerStartup
+    ```
+
+4. Open another terminal window and start the second node:
+    ```bash
+    java -cp target/training.jar oreilly.training.ServerStartup
+    ```
 
 Both nodes auto-discover each other and you'll have a two-nodes cluster ready for exercises.
  
@@ -35,47 +37,51 @@ Both nodes auto-discover each other and you'll have a two-nodes cluster ready fo
 
 Now you need to create a Media Store schema and load the cluster with sample data. Use SQLLine tool to achieve that:
 
-1. Launch SQLLine instance:
-```bash
-java -cp target/training.jar sqlline.SqlLine
-```
+1. Launch a SQLLine process:
+    ```bash
+    java -cp target/training.jar sqlline.SqlLine
+    ```
+   
 2. Connect to the cluster:
-```bash
-!connect jdbc:ignite:thin://127.0.0.1/ ignite ignite
-```
+    ```bash
+    !connect jdbc:ignite:thin://127.0.0.1/ ignite ignite
+    ```
+
 3. Load the Media Store database:
-```bash
-!run config/media_store.sql
-```
+    ```bash
+    !run config/media_store.sql
+    ```
+
 4. List all the tables of the database:
-```bash
-!tables
-```
+    ```bash
+    !tables
+    ```
 
-Keep the connection open as you'll use it for some exercises.
+Keep the connection open as you'll use it for following exercises.
 
-## Checking Data Distribution
+## Data Partitioning - Checking Data Distribution
 
-Having the cluster running and loaded with data, let's see how the records are distributed:
-1. Open and run `oreilly.training.KeyValueApp` to see how key-value APIs can be used to get Artists' records from
-the cluster. 
-```bash
-java -cp target/training.jar oreilly.training.KeyValueApp
-```
-2. Improve the application by implementing the logic that returns partitions and nodes the Artists' records
-are mapped to (Refer to the TODO item for details). Once you do this, you'll see that all the records are spread across
-many partitions that are located on a single cluster node.
+In this section you'll learn how to use key-value APIs for data processing and how to print partitions
+distribution across the cluster nodes:
 
-Scale out the cluster by adding another node and start the application one more time:
-1. Uncomment the `ignite-server-node-2` service in the `ignite-cluster.yaml` file
-2. Bring up the second node: `docker-compose -f docker/control-center.yaml up -d`
-3. Restart the application. You'll see that now partitions with the Artists' records are spread across the two cluster
-nodes.
+1. Check the source code of `oreilly.training.KeyValueApp` to see how key-value APIs are used to get Artists' records from
+the cluster.
 
-## Running SQL and Tapping Into Affinity Co-location
+2. Run the application to see what result it produces: 
+    ```bash
+    java -cp target/training.jar oreilly.training.KeyValueApp
+    ```
+
+3. Improve the application by implementing the logic that prints out the current partitions distribution
+(Refer to the TODO item for details).
+
+Optional, scale out the cluster by the third node and run the application again. You'll see that some partitions were
+moved to the new node.
+
+## Affinity Co-location - Optimizing Complex SQL Queries With JOINs
 
 Ignite supports SQL for data processing including distributed joins, grouping and sorting. In this section, you're 
-going to run basic SQL operations as well as more advanced ones that require data co-location to be set beforehand.
+going to run basic SQL operations as well as more advanced ones.
 
 ### Querying Single Table
 
@@ -107,7 +113,8 @@ Modify the last query by adding information about an author who is in the top-20
 JOIN with `Artist` table:
 
 ```sql
-SELECT track.trackId, track.name as track_name, genre.name as genre, artist.name as artist,  MAX(milliseconds / (1000 * 60)) as duration FROM track
+SELECT track.trackId, track.name as track_name, genre.name as genre, artist.name as artist,
+MAX(milliseconds / (1000 * 60)) as duration FROM track
 LEFT JOIN artist ON track.artistId = artist.artistId
 JOIN genre ON track.genreId = genre.genreId
 WHERE track.genreId < 17
@@ -132,12 +139,12 @@ avoid using the non-colocated joins:
 1. Search for the `CREATE TABLE Track` command in the `media_store.sql` file
 2. Replace `PRIMARY KEY (TrackId)` with `PRIMARY KEY (TrackId, ArtistId)`
 3. Co-located tracks with artist by adding `affinityKey=ArtistId` to the parameters list of the `WITH ...` operator
-4. Remove the Ignite work directory ${project}/ignite/work
-4. Stop and remove the cluster containers (you do this to fully clean Ignite metadata): `docker-compose -f docker/ignite-cluster.yaml rm -s -v`
-5. Start the cluster back, register it with Control Center and reload the database following instructions of the first three 
-sections.
-6. Go to Control Center and disable [non-colocated joins](https://www.gridgain.com/docs/control-center/latest/querying#non-colocated-joins)
- flag for the query from the previous section _Joining Two Non-Colocated Tables_.
+4. Clean the Ignite work directory `${project}/ignite/work`
+5. Restart the cluster nodes
+6. Reconnect with SQLLine 
+    ```bash
+    !connect jdbc:ignite:thin://127.0.0.1 ignite ignite
+    ```
 7. Run that query once again and you'll see that all the `artist` columns are filled in because now all the tracks are
 stored together with their artists on the same cluster node.
 
