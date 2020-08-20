@@ -22,11 +22,11 @@ public class InvoiceLineKey {
     private int invoiceLineId;
 
     @AffinityKeyMapped
-    private int customerId;
+    private int CUSTOMERID;
 
     public InvoiceLineKey(int invoiceLineId, int customerId) {
         this.invoiceLineId = invoiceLineId;
-        this.customerId = customerId;
+        this.CUSTOMERID = customerId;
     }
 
     public int getInvoiceLineId() {
@@ -34,7 +34,7 @@ public class InvoiceLineKey {
     }
 
     public int getCustomerId() {
-        return customerId;
+        return CUSTOMERID;
     }
 
     @Override public boolean equals(Object o) {
@@ -47,12 +47,12 @@ public class InvoiceLineKey {
 
         if (invoiceLineId != key.invoiceLineId)
             return false;
-        return customerId == key.customerId;
+        return CUSTOMERID == key.CUSTOMERID;
     }
 
     @Override public int hashCode() {
         int result = invoiceLineId;
-        result = 31 * result + customerId;
+        result = 31 * result + CUSTOMERID;
         return result;
     }
 }

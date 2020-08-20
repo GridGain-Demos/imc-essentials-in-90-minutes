@@ -17,31 +17,22 @@
 
 package oreilly.training;
 
-import java.util.Collections;
 import oreilly.training.model.Artist;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
-import org.apache.ignite.configuration.IgniteConfiguration;
-import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
-import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
+
 
 /**
  * The application reads Artists from the cluster using key-value requests. Complete the TODO
  * item to see how Ignite distributes records across partitions and nodes.
  */
-public class KeyValueSampleApp {
+public class KeyValueApp {
 
     public static void main(String[] args) {
-        IgniteConfiguration cfg = new IgniteConfiguration();
+        Ignition.setClientMode(true);
 
-        cfg.setClientMode(true);
-        cfg.setPeerClassLoadingEnabled(true);
-
-        cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(
-            new TcpDiscoveryVmIpFinder().setAddresses(Collections.singletonList("127.0.0.1:47500..47509"))));
-
-        Ignite ignite = Ignition.start(cfg);
+        Ignite ignite = Ignition.start("ignite-config.xml");
 
         getArtistsDistribution(ignite);
 

@@ -45,18 +45,12 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
  *
  * Finish the implementation of the compute task by completing the TODO task.
  */
-public class ComputationSampleApp {
+public class ComputeApp {
 
     public static void main(String[] args) {
-        IgniteConfiguration cfg = new IgniteConfiguration();
+        Ignition.setClientMode(true);
 
-        cfg.setClientMode(true);
-        cfg.setPeerClassLoadingEnabled(true);
-
-        cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(
-            new TcpDiscoveryVmIpFinder().setAddresses(Collections.singletonList("127.0.0.1:47500..47509"))));
-
-        Ignite ignite = Ignition.start(cfg);
+        Ignite ignite = Ignition.start("ignite-config.xml");
 
         calculateTopPayingCustomers(ignite);
 
@@ -99,6 +93,11 @@ public class ComputationSampleApp {
                  * TODO:
                  * initialize the <code>unitPrice</code> and <code>quantity</code>
                  * variables with the data from <code>val</code> variable.
+                 *
+                 * Rename this compute task so that the server nodes can load the logic without the cluster restart.
+                 * That's just the specificity of this demo - the oreilly.training.ServerStartup added the class of this
+                 * logic to its classpath upon the startup and, thus, won't load new versions of the class from the client
+                 * apps like this one.
                  */
                 BigDecimal unitPrice = new BigDecimal(0);
                 int quantity = 0;
