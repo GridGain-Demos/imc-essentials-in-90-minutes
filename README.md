@@ -17,18 +17,18 @@ Start a two-node Ignite cluster:
 
 1. Open a terminal window and navigate to the root directory of this project.
 
-2. Use Maven to create an executable JAR with all the dependencies:
+2. Use Maven to create a core executable JAR with all the dependencies:
     ```bash
-    mvn clean package
+    mvn clean package -P core
     ```
 3. Start the first cluster node:
     ```bash
-    java -cp target/training.jar oreilly.training.ServerStartup
+    java -cp libs/core.jar training.ServerStartup
     ```
 
 4. Open another terminal window and start the second node:
     ```bash
-    java -cp target/training.jar oreilly.training.ServerStartup
+    java -cp libs/core.jar training.ServerStartup
     ```
 
 Both nodes auto-discover each other and you'll have a two-nodes cluster ready for exercises.
@@ -39,7 +39,7 @@ Now you need to create a Media Store schema and load the cluster with sample dat
 
 1. Launch a SQLLine process:
     ```bash
-    java -cp target/training.jar sqlline.SqlLine
+    java -cp libs/core.jar sqlline.SqlLine
     ```
    
 2. Connect to the cluster:
@@ -64,15 +64,20 @@ Keep the connection open as you'll use it for following exercises.
 In this section you'll learn how to use key-value APIs for data processing and how to print partitions
 distribution across the cluster nodes:
 
-1. Check the source code of `oreilly.training.KeyValueApp` to see how key-value APIs are used to get Artists' records from
+1. Check the source code of `training.KeyValueApp` to see how key-value APIs are used to get Artists' records from
 the cluster.
 
-2. Run the application to see what result it produces: 
+2. Build an executable JAR with the applications' classes:
     ```bash
-    java -cp target/training.jar oreilly.training.KeyValueApp
+    mvn clean package -P apps
+    ```
+   
+3. Run the application to see what result it produces: 
+    ```bash
+    java -cp libs/apps.jar training.KeyValueApp
     ```
 
-3. Improve the application by implementing the logic that prints out the current partitions distribution
+4. Improve the application by implementing the logic that prints out the current partitions distribution
 (Refer to the TODO item for details).
 
 Optional, scale out the cluster by the third node and run the application again. You'll see that some partitions were
@@ -150,12 +155,25 @@ stored together with their artists on the same cluster node.
 
 ## Running Co-located Compute Tasks
 
-Run `ComputationSampleApp` that uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers.
+Run `training.ComputeApp` that uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers.
 The compute task executes on every cluster node, iterates through local records and responds to the application that merges partial
 results.
+
+Run the app to see how it works:
 ```bash
-java -cp target/training.jar oreilly.training.ComputeApp
+java -cp libs/apps.jar training.ComputeApp
 ```
 
-Make sure to complete the TODO left in the code. Otherwise, that task will produce an incorrect result.
+The computation doesn't produce a correct result, thus, you need to do the following:
+
+1. Fix the issue by addressing the TODO left in the code.
+
+2. Build an executable JAR with the applications' classes:
+    ```bash
+    mvn clean package -P apps
+    ```
+3. Run the app again:
+    ```bash
+    java -cp libs/apps.jar training.ComputeApp
+    ```
 

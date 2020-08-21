@@ -14,12 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package oreilly.training;
+package training.model;
 
-import org.apache.ignite.Ignition;
+import java.math.BigDecimal;
 
-public class ServerStartup {
-    public static void main(String[] args) {
-        Ignition.start("ignite-config.xml");
+public class InvoiceLine {
+    private int invoiceId;
+
+    private int trackId;
+
+    private BigDecimal unitPrice;
+
+    private int quantity;
+
+    public InvoiceLine(int invoiceId, int trackId, BigDecimal unitPrice, int quantity) {
+        this.invoiceId = invoiceId;
+        this.trackId = trackId;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+    }
+
+    public int getInvoiceId() {
+        return invoiceId;
+    }
+
+    public int getTrackId() {
+        return trackId;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

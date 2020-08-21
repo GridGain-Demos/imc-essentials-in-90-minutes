@@ -14,23 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package training;
 
-package oreilly.training.model;
+import org.apache.ignite.Ignition;
 
-public class Artist {
-    private String name;
-
-    public Artist(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override public String toString() {
-        return "Artist{" +
-            "name='" + name + '\'' +
-            '}';
+public class ServerStartup {
+    public static void main(String[] args) {
+        Ignition.start("ignite-config.xml");
     }
 }

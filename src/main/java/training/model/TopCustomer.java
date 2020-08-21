@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package oreilly.training.model;
+package training.model;
 
 import java.math.BigDecimal;
 import org.jetbrains.annotations.NotNull;

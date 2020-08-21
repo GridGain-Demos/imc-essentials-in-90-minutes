@@ -14,39 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package oreilly.training.model;
 
-import java.math.BigDecimal;
+package training.model;
 
-public class InvoiceLine {
-    private int invoiceId;
+public class Artist {
+    private String name;
 
-    private int trackId;
-
-    private BigDecimal unitPrice;
-
-    private int quantity;
-
-    public InvoiceLine(int invoiceId, int trackId, BigDecimal unitPrice, int quantity) {
-        this.invoiceId = invoiceId;
-        this.trackId = trackId;
-        this.unitPrice = unitPrice;
-        this.quantity = quantity;
+    public Artist(String name) {
+        this.name = name;
     }
 
-    public int getInvoiceId() {
-        return invoiceId;
+    public String getName() {
+        return name;
     }
 
-    public int getTrackId() {
-        return trackId;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
+    @Override public String toString() {
+        return "Artist{" +
+            "name='" + name + '\'' +
+            '}';
     }
 }
