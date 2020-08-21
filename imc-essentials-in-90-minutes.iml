@@ -16,6 +16,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: sqlline:sqlline:1.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-terminal:3.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-reader:3.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-terminal-jansi:3.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.18" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-terminal-jna:3.12.1" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-builtins:3.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jline:jline-style:3.12.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ignite:ignite-core:2.8.1" level="project" />
     <orderEntry type="library" name="Maven: javax.cache:cache-api:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.3" level="project" />

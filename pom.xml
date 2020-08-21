@@ -69,7 +69,7 @@
                                 <filter>
                                     <artifact>${groupId}:${artifactId}</artifact>
                                     <excludes>
-                                        <exclude>training/ComputeApp.class</exclude>
+                                        <exclude>training/ComputeApp*</exclude>
                                         <exclude>training/KeyValueApp.class</exclude>
                                         <exclude>training/model/*</exclude>
                                     </excludes>
