@@ -14,16 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package oreilly.training;
+package training;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 import javax.cache.Cache;
-import oreilly.training.model.TopCustomer;
+import training.model.TopCustomer;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
@@ -32,11 +31,8 @@ import org.apache.ignite.cache.CachePeekMode;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.cluster.ClusterGroup;
-import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.lang.IgniteCallable;
 import org.apache.ignite.resources.IgniteInstanceResource;
-import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
-import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
 
 /**
  * The application uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers. The compute
@@ -93,11 +89,6 @@ public class ComputeApp {
                  * TODO:
                  * initialize the <code>unitPrice</code> and <code>quantity</code>
                  * variables with the data from <code>val</code> variable.
-                 *
-                 * Rename this compute task so that the server nodes can load the logic without the cluster restart.
-                 * That's just the specificity of this demo - the oreilly.training.ServerStartup added the class of this
-                 * logic to its classpath upon the startup and, thus, won't load new versions of the class from the client
-                 * apps like this one.
                  */
                 BigDecimal unitPrice = new BigDecimal(0);
                 int quantity = 0;

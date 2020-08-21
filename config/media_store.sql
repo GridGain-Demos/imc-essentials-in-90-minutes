@@ -35,7 +35,7 @@ CREATE TABLE Artist
     ArtistId INT,
     Name VARCHAR(120),
     PRIMARY KEY (ArtistId)
-) WITH "template=partitioned, CACHE_NAME=Artist, VALUE_TYPE=oreilly.training.model.Artist";
+) WITH "template=partitioned, CACHE_NAME=Artist, VALUE_TYPE=training.model.Artist";
 
 CREATE TABLE Album
 (
@@ -44,7 +44,7 @@ CREATE TABLE Album
     ArtistId INT,
     PRIMARY KEY (AlbumId, ArtistId)
 ) WITH "template=partitioned, affinityKey=ArtistId, CACHE_NAME=Album,
-        KEY_TYPE=oreilly.training.model.AlbumKey, VALUE_TYPE=oreilly.training.model.Album";
+        KEY_TYPE=training.model.AlbumKey, VALUE_TYPE=training.model.Album";
 
 CREATE TABLE Customer
 (
@@ -62,7 +62,7 @@ CREATE TABLE Customer
     Email VARCHAR(60),
     SupportRepId INT,
     PRIMARY KEY (CustomerId)
-) WITH "template=partitioned, CACHE_NAME=Customer, VALUE_TYPE=oreilly.training.model.Customer";
+) WITH "template=partitioned, CACHE_NAME=Customer, VALUE_TYPE=training.model.Customer";
 
 CREATE TABLE Invoice
 (
@@ -77,7 +77,7 @@ CREATE TABLE Invoice
     Total DECIMAL(10,2),
     PRIMARY KEY  (InvoiceId, CustomerId)
 ) WITH "template=partitioned, affinityKey=CustomerId, CACHE_NAME=Invoice,
-        KEY_TYPE=oreilly.training.model.InvoiceKey, VALUE_TYPE=oreilly.training.model.Invoice";
+        KEY_TYPE=training.model.InvoiceKey, VALUE_TYPE=training.model.Invoice";
 
 CREATE TABLE InvoiceLine
 (
@@ -89,7 +89,7 @@ CREATE TABLE InvoiceLine
     Quantity INT,
     PRIMARY KEY (InvoiceLineId, CustomerId)
 ) WITH "template=partitioned, affinityKey=CustomerId, CACHE_NAME=InvoiceLine,
-        KEY_TYPE=oreilly.training.model.InvoiceLineKey, VALUE_TYPE=oreilly.training.model.InvoiceLine";
+        KEY_TYPE=training.model.InvoiceLineKey, VALUE_TYPE=training.model.InvoiceLine";
 
 CREATE TABLE Employee
 (
@@ -109,28 +109,28 @@ CREATE TABLE Employee
     Fax VARCHAR(24),
     Email VARCHAR(60),
     PRIMARY KEY (EmployeeId)
-) WITH "template=partitioned, CACHE_NAME=Employee, VALUE_TYPE=oreilly.training.model.Employee";
+) WITH "template=partitioned, CACHE_NAME=Employee, VALUE_TYPE=training.model.Employee";
 
 CREATE TABLE Genre
 (
     GenreId INT,
     Name VARCHAR(120),
     PRIMARY KEY (GenreId)
-) WITH "template=replicated, CACHE_NAME=Genre, VALUE_TYPE=oreilly.training.model.Genre";
+) WITH "template=replicated, CACHE_NAME=Genre, VALUE_TYPE=training.model.Genre";
 
 CREATE TABLE MediaType
 (
     MediaTypeId INT,
     Name VARCHAR(120),
     PRIMARY KEY (MediaTypeId)
-) WITH "template=replicated, CACHE_NAME=MediaType, VALUE_TYPE=oreilly.training.model.MediaType";
+) WITH "template=replicated, CACHE_NAME=MediaType, VALUE_TYPE=training.model.MediaType";
 
 CREATE TABLE Playlist
 (
     PlaylistId INT,
     Name VARCHAR(120),
     PRIMARY KEY  (PlaylistId)
-) WITH "template=partitioned, CACHE_NAME=Playlist, VALUE_TYPE=oreilly.training.model.Playlist";
+) WITH "template=partitioned, CACHE_NAME=Playlist, VALUE_TYPE=training.model.Playlist";
 
 CREATE TABLE PlaylistTrack
 (
@@ -140,7 +140,7 @@ CREATE TABLE PlaylistTrack
     Dummy TINYINT, /* to fix the issue saying that the table must have at least one non-primary key column */
     PRIMARY KEY (PlaylistId, TrackId, ArtistId)
 ) WITH "template=partitioned, affinityKey=ArtistId, CACHE_NAME=PlaylistTrack,
-        KEY_TYPE=oreilly.training.model.PlaylistTrackKey, VALUE_TYPE=oreilly.training.model.PlaylistTrack";
+        KEY_TYPE=training.model.PlaylistTrackKey, VALUE_TYPE=training.model.PlaylistTrack";
 
 CREATE TABLE Track
 (
@@ -156,7 +156,7 @@ CREATE TABLE Track
     UnitPrice DECIMAL(10,2),
     PRIMARY KEY (TrackId)
 ) WITH "template=partitioned, CACHE_NAME=Track,
-        KEY_TYPE=oreilly.training.model.TrackKey, VALUE_TYPE=oreilly.training.model.Track";
+        KEY_TYPE=training.model.TrackKey, VALUE_TYPE=training.model.Track";
 
 SET STREAMING ON;
 

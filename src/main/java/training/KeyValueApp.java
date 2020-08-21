@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package oreilly.training;
+package training;
 
-import oreilly.training.model.Artist;
+import training.model.Artist;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
