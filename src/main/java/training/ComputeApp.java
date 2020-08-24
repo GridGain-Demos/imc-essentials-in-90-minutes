@@ -125,7 +125,7 @@ public class ComputeApp {
 
             int counter = 0;
 
-            System.out.println(">>> Top 5 Customers: ");
+            System.out.println(">>> Top 5 Paying Listeners: ");
 
             while (iterator.hasNext() && counter++ < 5) {
                 TopCustomer customer = iterator.next();
@@ -148,7 +148,7 @@ public class ComputeApp {
     }
 
     private static void printTop5PayingCustomers(Collection<TreeSet<TopCustomer>> results) {
-        System.out.println(">>> Top 5 Customers Across All Cluster Nodes");
+        System.out.println(">>> Top 5 Paying Listeners Across All Cluster Nodes");
 
         Iterator<TreeSet<TopCustomer>> iterator = results.iterator();
 
