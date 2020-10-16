@@ -1,9 +1,7 @@
 # Code Samples for O'Reilly Training, In-Memory Computing Essentials
 
-This project is designed for the instructor-led [O'Reilly Training - In-Memory Computing Essentials](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920455431/).
+This project is designed for the instructor-led [O'Reilly Training - In-Memory Computing Essentials](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920406150/).
 The code samples demonstrate essential capabilities of in-memory computing platforms such as Apache Ignite.
-This project is for the live [O'Reilly Training - In-Memory Computing Essentials in 90 minutes](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920406150/).
-The code samples demonstrate the essential capabilities of in-memory computing platforms such as Apache Ignite in practice.
 
 You can study the samples by following the instructor during the training or completing this guide on your own.
 
@@ -166,9 +164,9 @@ Run the app to see how it works:
 java -cp libs/apps.jar training.ComputeApp
 ```
 
-Update the computation so that it returns top-10 paying customers:
+Modify the computation logic: 
 
-1. Search for the TODO left in the code.
+1. Update the logic to return top-10 paying customers.
 
 2. Build an executable JAR with the applications' classes:
     ```bash
