@@ -1,7 +1,7 @@
-# Code Samples for O'Reilly Training, In-Memory Computing Essentials in 90 minutes
+# Code Samples for O'Reilly Training, In-Memory Computing Essentials
 
-This project is for the live [O'Reilly Training - In-Memory Computing Essentials in 90 minutes](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920455431/).
-The code samples demonstrate the essential capabilities of in-memory computing platforms such as Apache Ignite in practice.
+This project is designed for the instructor-led [O'Reilly Training - In-Memory Computing Essentials](https://learning.oreilly.com/live-training/courses/in-memory-computing-essentials-in-90-minutes/0636920455431/).
+The code samples demonstrate essential capabilities of in-memory computing platforms such as Apache Ignite.
 
 You can study the samples by following the instructor during the training or completing this guide on your own.
 
@@ -155,7 +155,7 @@ stored together with their artists on the same cluster node.
 
 ## Running Co-located Compute Tasks
 
-Run `training.ComputeApp` that uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers.
+Run `training.ComputeApp` that uses Apache Ignite compute capabilities for a calculation of top-5 paying customers.
 The compute task executes on every cluster node, iterates through local records and responds to the application that merges partial
 results.
 
@@ -164,9 +164,9 @@ Run the app to see how it works:
 java -cp libs/apps.jar training.ComputeApp
 ```
 
-The computation doesn't produce a correct result, thus, you need to do the following:
+Update the computation so that it returns top-10 paying customers:
 
-1. Fix the issue by addressing the TODO left in the code.
+1. Search for the TODO left in the code.
 
 2. Build an executable JAR with the applications' classes:
     ```bash

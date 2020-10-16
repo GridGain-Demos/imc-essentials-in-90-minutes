@@ -35,11 +35,11 @@ import org.apache.ignite.lang.IgniteCallable;
 import org.apache.ignite.resources.IgniteInstanceResource;
 
 /**
- * The application uses Apache Ignite compute capabilities for a calculation of the top 5 paying customers. The compute
+ * The application uses Apache Ignite compute capabilities for a calculation of the top-5 paying customers. The compute
  * task executes on every cluster node, iterates through local records and responds to the application that merges partial
  * results.
  *
- * Finish the implementation of the compute task by completing the TODO task.
+ * Update the implementation of the compute task to return top-10 paying customers.
  */
 public class ComputeApp {
 
@@ -56,10 +56,12 @@ public class ComputeApp {
     private static void calculateTopPayingCustomers(Ignite ignite) {
         ClusterGroup serversGroup = ignite.cluster().forServers();
 
-        Collection<TreeSet<TopCustomer>> results = ignite.compute(
-            serversGroup).broadcast(new TopPayingCustomersTask());
+        int customersCount = 5;
 
-        printTop5PayingCustomers(results);
+        Collection<TreeSet<TopCustomer>> results = ignite.compute(
+            serversGroup).broadcast(new TopPayingCustomersTask(customersCount));
+
+        printTopPayingCustomers(results, customersCount);
     }
 
     /**
@@ -70,6 +72,12 @@ public class ComputeApp {
         private Ignite localNode;
 
         private HashMap<Integer, BigDecimal> customerPurchases = new HashMap<>();
+
+        int customersCount;
+
+        public TopPayingCustomersTask(int customersCount) {
+            this.customersCount = customersCount;
+        }
 
         public TreeSet<TopCustomer> call() throws Exception {
             IgniteCache<BinaryObject, BinaryObject> invoiceLineCache = localNode.cache(
@@ -85,13 +93,8 @@ public class ComputeApp {
                 BinaryObject val = entry.getValue();
                 BinaryObject key = entry.getKey();
 
-                /**
-                 * TODO:
-                 * initialize the <code>unitPrice</code> and <code>quantity</code>
-                 * variables with the data from <code>val</code> variable.
-                 */
-                BigDecimal unitPrice = new BigDecimal(0);
-                int quantity = 0;
+                BigDecimal unitPrice = val.field("unitPrice");
+                int quantity = val.field("quantity");
 
                 processPurchase(key.field("customerId"), unitPrice.multiply(new BigDecimal(quantity)));
             });
@@ -113,7 +116,7 @@ public class ComputeApp {
 
             TreeSet<TopCustomer> sortedPurchases = new TreeSet<>();
 
-            TreeSet<TopCustomer> top5 = new TreeSet<>();
+            TreeSet<TopCustomer> top = new TreeSet<>();
 
             customerPurchases.entrySet().forEach(entry -> {
                 TopCustomer topCustomer = new TopCustomer(entry.getKey(), entry.getValue());
@@ -125,9 +128,9 @@ public class ComputeApp {
 
             int counter = 0;
 
-            System.out.println(">>> Top 5 Paying Listeners: ");
+            System.out.println(">>> Top " + customersCount + " Paying Listeners: ");
 
-            while (iterator.hasNext() && counter++ < 5) {
+            while (iterator.hasNext() && counter++ < customersCount) {
                 TopCustomer customer = iterator.next();
 
                 // It's safe to use localPeek because invoices are co-located with customer data.
@@ -138,17 +141,17 @@ public class ComputeApp {
                 customer.setCity(customerRecord.field("city"));
                 customer.setCountry(customerRecord.field("country"));
 
-                top5.add(customer);
+                top.add(customer);
 
                 System.out.println(customer);
             }
 
-            return top5;
+            return top;
         }
     }
 
-    private static void printTop5PayingCustomers(Collection<TreeSet<TopCustomer>> results) {
-        System.out.println(">>> Top 5 Paying Listeners Across All Cluster Nodes");
+    private static void printTopPayingCustomers(Collection<TreeSet<TopCustomer>> results, int customersCount) {
+        System.out.println(">>> Top " + customersCount + " Paying Listeners Across All Cluster Nodes");
 
         Iterator<TreeSet<TopCustomer>> iterator = results.iterator();
 
@@ -161,7 +164,7 @@ public class ComputeApp {
 
         int counter = 0;
 
-        while (customerIterator.hasNext() && counter++ < 5)
+        while (customerIterator.hasNext() && counter++ < customersCount)
             System.out.println(customerIterator.next());
     }
 }
